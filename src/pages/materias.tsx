@@ -29,27 +29,6 @@ export default function Materias() {
   const [loading, setLoading] = useState(false)
   const [materias, setMaterias] = useState<IMateria[]>([])
   const [createMateriaModalOpen, setCreateMateriaModalOpen] = useState(false)
-  const titleRef = useRef<HTMLInputElement>(null)
-  const descriptionRef = useRef<HTMLInputElement>(null)
-
-  const createMateria = async () => {
-    const title = titleRef.current.value
-
-    if (title === '') return
-
-    setCreateMateriaModalOpen(false)
-
-    setLoading(true)
-
-    try {
-      await api.post('/materias', { title })
-    } catch (err) {
-      console.log({ err })
-    }
-
-    load()
-    setLoading(false)
-  }
 
   const deleteMateria = async (id: string) => {
     setLoading(true)
@@ -92,17 +71,20 @@ export default function Materias() {
             <ArrowBackIcon width="40px" height="40px" />
           </a>
         </Link>
-        <Center flexDirection="column" height="80vh">
+        <Flex
+          flexDirection="column"
+          marginTop="100px"
+          marginBottom="50px"
+          alignItems="center"
+        >
           {loading ? (
             <Spinner height="40px" width="40px" />
           ) : (
             <>
               <CreateMateria
-                createMateria={createMateria}
                 isOpen={createMateriaModalOpen}
                 setIsOpen={setCreateMateriaModalOpen}
-                titleRef={titleRef}
-                descriptionRef={descriptionRef}
+                load={load}
               />
               <Button
                 mb="30px"
@@ -154,7 +136,7 @@ export default function Materias() {
               ))}
             </>
           )}
-        </Center>
+        </Flex>
       </Box>
     </>
   )
