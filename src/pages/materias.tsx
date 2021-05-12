@@ -14,8 +14,9 @@ import {
 import { FaTrashAlt } from 'react-icons/fa'
 import { api } from 'src/services/api'
 import CreateMateria from 'src/components/CreateMateria'
+import UpdateMateria from 'src/components/UpdateMateria'
 
-interface IMateria {
+export interface IMateria {
   codigo: number
   departamento: string
   nome: string
@@ -29,6 +30,8 @@ export default function Materias() {
   const [loading, setLoading] = useState(false)
   const [materias, setMaterias] = useState<IMateria[]>([])
   const [createMateriaModalOpen, setCreateMateriaModalOpen] = useState(false)
+  const [updateMateriaModalOpen, setUpdateMateriaModalOpen] = useState(false)
+  const [selectedMateria, setSelectedMateria] = useState<IMateria | null>(null)
 
   const deleteMateria = async (id: string) => {
     setLoading(true)
@@ -86,6 +89,14 @@ export default function Materias() {
                 setIsOpen={setCreateMateriaModalOpen}
                 load={load}
               />
+              {selectedMateria && (
+                <UpdateMateria
+                  isOpen={updateMateriaModalOpen}
+                  setIsOpen={setUpdateMateriaModalOpen}
+                  load={load}
+                  materia={selectedMateria}
+                />
+              )}
               <Button
                 mb="30px"
                 bg="green.400"
@@ -105,6 +116,10 @@ export default function Materias() {
                   alignItems="center"
                   justifyContent="space-between"
                   width="400px"
+                  onClick={() => {
+                    setSelectedMateria(materia)
+                    setUpdateMateriaModalOpen(true)
+                  }}
                   marginBottom={i !== materias.length - 1 ? '15px' : '0'}
                 >
                   <Flex flexDirection="column">
