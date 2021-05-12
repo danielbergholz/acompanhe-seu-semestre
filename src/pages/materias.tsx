@@ -167,6 +167,7 @@ export default function Materias() {
                       cursor="pointer"
                       marginBottom="20px"
                       onClick={() => {
+                        console.log(materia)
                         setSelectedMateria(materia)
                         setUpdateMateriaModalOpen(true)
                       }}

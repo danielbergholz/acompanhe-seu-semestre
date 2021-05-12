@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useRef, useState } from 'react'
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react'
 import {
   Modal,
   ModalOverlay,
@@ -24,42 +24,25 @@ interface IProps {
 
 const UpdateMateria = ({ isOpen, setIsOpen, load, materia }: IProps) => {
   const [loading, setLoading] = useState(false)
-  const codigoRef = useRef<HTMLInputElement>(null)
-  const professorRef = useRef<HTMLInputElement>(null)
-  const departamentoRef = useRef<HTMLInputElement>(null)
-  const nomeRef = useRef<HTMLInputElement>(null)
-  const qtdCreditosRef = useRef<HTMLInputElement>(null)
+  const [codigo, setCodigo] = useState(materia.codigo)
+  const [professor, setProfessor] = useState(materia.professor)
+  const [departamento, setDepartamento] = useState(materia.departamento)
+  const [nome, setNome] = useState(materia.nome)
+  const [qtdCreditos, setQtdCreditos] = useState(materia.qtdCreditos)
 
   const toast = useToast()
 
   const updateMateria = async () => {
-    const codigo = codigoRef.current.value
-    const professor = professorRef.current.value
-    const departamento = departamentoRef.current.value
-    const nome = nomeRef.current.value
-    const qtdCreditos = qtdCreditosRef.current.value
-
-    const updateObject = {}
-    if (codigo !== '') {
-      Object.assign(updateObject, { codigo })
-    }
-    if (professor !== '') {
-      Object.assign(updateObject, { professor })
-    }
-    if (departamento !== '') {
-      Object.assign(updateObject, { departamento })
-    }
-    if (nome !== '') {
-      Object.assign(updateObject, { nome })
-    }
-    if (qtdCreditos !== '') {
-      Object.assign(updateObject, { qtdCreditos })
-    }
-
     setLoading(true)
 
     try {
-      await api.put(`/materias/${materia.codigo}`, updateObject)
+      await api.put(`/materias/${materia.codigo}`, {
+        codigo,
+        professor,
+        departamento,
+        nome,
+        qtdCreditos,
+      })
       toast({
         title: 'Disciplina atualizada com sucesso!',
         isClosable: true,
@@ -89,6 +72,14 @@ const UpdateMateria = ({ isOpen, setIsOpen, load, materia }: IProps) => {
     setIsOpen(false)
   }
 
+  useEffect(() => {
+    setCodigo(materia.codigo)
+    setProfessor(materia.professor)
+    setDepartamento(materia.departamento)
+    setNome(materia.nome)
+    setQtdCreditos(materia.qtdCreditos)
+  }, [materia])
+
   return (
     <Modal isOpen={isOpen} onClose={onClose} isCentered>
       <ModalOverlay />
@@ -97,23 +88,43 @@ const UpdateMateria = ({ isOpen, setIsOpen, load, materia }: IProps) => {
         <ModalCloseButton />
         <ModalBody pb={6}>
           <FormControl>
-            <Input placeholder="Código" ref={codigoRef} />
+            <Input
+              placeholder="Código"
+              value={codigo}
+              onChange={(e) => setCodigo(+e.target.value)}
+            />
           </FormControl>
 
           <FormControl mt={4}>
-            <Input placeholder="Nome" ref={nomeRef} />
+            <Input
+              placeholder="Nome"
+              value={nome}
+              onChange={(e) => setNome(e.target.value)}
+            />
           </FormControl>
 
           <FormControl mt={4}>
-            <Input placeholder="Professor" ref={professorRef} />
+            <Input
+              placeholder="Professor"
+              value={professor}
+              onChange={(e) => setProfessor(e.target.value)}
+            />
           </FormControl>
 
           <FormControl mt={4}>
-            <Input placeholder="Departamento" ref={departamentoRef} />
+            <Input
+              placeholder="Departamento"
+              value={departamento}
+              onChange={(e) => setDepartamento(e.target.value)}
+            />
           </FormControl>
 
           <FormControl mt={4}>
-            <Input placeholder="Quantidade de créditos" ref={qtdCreditosRef} />
+            <Input
+              placeholder="Quantidade de créditos"
+              value={qtdCreditos}
+              onChange={(e) => setQtdCreditos(+e.target.value)}
+            />
           </FormControl>
         </ModalBody>
 
