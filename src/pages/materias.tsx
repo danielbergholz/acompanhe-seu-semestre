@@ -16,15 +16,18 @@ import { api } from 'src/services/api'
 import CreateMateria from 'src/components/CreateMateria'
 
 interface IMateria {
-  title: string
+  codigo: number
+  departamento: string
+  nome: string
+  professor: string
+  qtdCreditos: number
+  __v: number
+  _id: string
 }
 
 export default function Materias() {
   const [loading, setLoading] = useState(false)
-  const [materias, setMaterias] = useState<IMateria[]>([
-    { title: 'SisMic' },
-    { title: 'Projeto transversal 2' },
-  ])
+  const [materias, setMaterias] = useState<IMateria[]>([])
   const [createMateriaModalOpen, setCreateMateriaModalOpen] = useState(false)
   const titleRef = useRef<HTMLInputElement>(null)
   const descriptionRef = useRef<HTMLInputElement>(null)
@@ -74,9 +77,9 @@ export default function Materias() {
     setLoading(false)
   }
 
-  // useEffect(() => {
-  //   load()
-  // }, [])
+  useEffect(() => {
+    load()
+  }, [])
 
   return (
     <>
@@ -89,7 +92,7 @@ export default function Materias() {
             <ArrowBackIcon width="40px" height="40px" />
           </a>
         </Link>
-        <Center flexDirection="column" height="70vh">
+        <Center flexDirection="column" height="80vh">
           {loading ? (
             <Spinner height="40px" width="40px" />
           ) : (
@@ -112,7 +115,7 @@ export default function Materias() {
               </Button>
               {materias.map((materia, i) => (
                 <Flex
-                  key={i}
+                  key={materia._id}
                   backgroundColor="gray.200"
                   borderRadius="4px"
                   padding="10px 15px"
@@ -122,7 +125,30 @@ export default function Materias() {
                   width="400px"
                   marginBottom={i !== materias.length - 1 ? '15px' : '0'}
                 >
-                  <Text fontSize="18px">{materia.title}</Text>
+                  <Flex flexDirection="column">
+                    <Text fontSize="18px">
+                      {' '}
+                      <Text as="strong">Código:</Text> {materia.codigo}
+                    </Text>
+                    <Text fontSize="18px">
+                      {' '}
+                      <Text as="strong">Nome:</Text> {materia.nome}
+                    </Text>
+                    <Text fontSize="18px">
+                      {' '}
+                      <Text as="strong">Departamento:</Text>{' '}
+                      {materia.departamento}
+                    </Text>
+                    <Text fontSize="18px">
+                      {' '}
+                      <Text as="strong">Professor:</Text> {materia.professor}
+                    </Text>
+                    <Text fontSize="18px">
+                      {' '}
+                      <Text as="strong">Quantidade de créditos:</Text>{' '}
+                      {materia.qtdCreditos}
+                    </Text>
+                  </Flex>
                   <Icon as={FaTrashAlt} color="red.400" />
                 </Flex>
               ))}
