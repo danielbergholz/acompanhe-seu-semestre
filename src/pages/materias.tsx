@@ -10,8 +10,9 @@ import {
   Center,
   Button,
   Spinner,
+  useToast,
 } from '@chakra-ui/react'
-import { FaTrashAlt } from 'react-icons/fa'
+import { FaTrashAlt, FaEdit } from 'react-icons/fa'
 import { api } from 'src/services/api'
 import CreateMateria from 'src/components/CreateMateria'
 import UpdateMateria from 'src/components/UpdateMateria'
@@ -33,12 +34,30 @@ export default function Materias() {
   const [updateMateriaModalOpen, setUpdateMateriaModalOpen] = useState(false)
   const [selectedMateria, setSelectedMateria] = useState<IMateria | null>(null)
 
-  const deleteMateria = async (id: string) => {
+  const toast = useToast()
+
+  const deleteMateria = async (codigo: number) => {
     setLoading(true)
 
     try {
-      await api.delete(`/materias/${id}`)
+      await api.delete(`/materias/${codigo}`)
+      toast({
+        title: 'Disciplina deletada com sucesso!',
+        isClosable: true,
+        position: 'top',
+        duration: 5000,
+        status: 'success',
+      })
     } catch (err) {
+      toast({
+        title: 'Erro ao deletar matéria',
+        description:
+          err?.response?.data?.message || 'Favor tentar novamente mais tarde',
+        isClosable: true,
+        position: 'top',
+        duration: 5000,
+        status: 'error',
+      })
       console.log({ err })
     }
 
@@ -112,14 +131,9 @@ export default function Materias() {
                   backgroundColor="gray.200"
                   borderRadius="4px"
                   padding="10px 15px"
-                  cursor="pointer"
                   alignItems="center"
                   justifyContent="space-between"
                   width="400px"
-                  onClick={() => {
-                    setSelectedMateria(materia)
-                    setUpdateMateriaModalOpen(true)
-                  }}
                   marginBottom={i !== materias.length - 1 ? '15px' : '0'}
                 >
                   <Flex flexDirection="column">
@@ -146,7 +160,24 @@ export default function Materias() {
                       {materia.qtdCreditos}
                     </Text>
                   </Flex>
-                  <Icon as={FaTrashAlt} color="red.400" />
+                  <Flex flexDirection="column">
+                    <Icon
+                      as={FaEdit}
+                      color="blue.400"
+                      cursor="pointer"
+                      marginBottom="20px"
+                      onClick={() => {
+                        setSelectedMateria(materia)
+                        setUpdateMateriaModalOpen(true)
+                      }}
+                    />
+                    <Icon
+                      as={FaTrashAlt}
+                      color="red.400"
+                      onClick={() => deleteMateria(materia.codigo)}
+                      cursor="pointer"
+                    />
+                  </Flex>
                 </Flex>
               ))}
             </>
