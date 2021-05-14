@@ -2,12 +2,12 @@
 
 ### Frontend
 
-- Daniel Gobbi Bergholz 160004551
+- Daniel Gobbi Bergholz 16/0004551
 
 ### Backend
 
 - Lukas
-- Hugo Szerwinski
+- Hugo Salomão Studart Szerwinski 17/0162435
 
 ## Tecnologias utilizadas
 
