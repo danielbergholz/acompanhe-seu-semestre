@@ -6,7 +6,7 @@
 
 ### Backend
 
-- Lukas
+- Lukas Nunes de Souza 17/0150381
 - Hugo Salomão Studart Szerwinski 17/0162435
 
 ## Tecnologias utilizadas
